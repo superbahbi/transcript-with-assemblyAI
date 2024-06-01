@@ -5,7 +5,13 @@ import {
   continueConversation,
   transcribeAction,
 } from "@/action/transcribe-action";
-import { ChatEmpty } from "@/components/chat-empty";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+
 import { ChatList } from "@/components/chat-list";
 import { LoadingTransactionsEvent } from "@/components/loading-transactions-event";
 import { Button } from "@/components/ui/button";
@@ -102,13 +108,26 @@ export default function Home() {
       },
     );
   };
-  const { messagesRef, scrollRef, visibilityRef, scrollToBottom } =
+  const { messagesRef, scrollRef, scrollRef2, visibilityRef, scrollToBottom } =
     useScrollAnchor();
 
   return (
-    <div className="w-full grid min-h-screen">
-      <div className="flex flex-col items-center justify-center">
-        <div className="max-w-md">
+    // <Dialog open={isOpen} onOpenChange={onClose}>
+    //   <DialogContent
+    //     onPointerDownOutside={(event: any) => event.preventDefault()}
+    //     onEscapeKeyDown={(event: any) => event.preventDefault()}
+    //   >
+    //     <LoadingTransactionsEvent
+    //       eventId={eventId}
+    //       setEventId={setEventId}
+    //       onClose={onClose}
+    //     />
+    //   </DialogContent>
+    // </Dialog>
+
+    <div className="w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-screen">
+      <div className="flex items-center justify-center py-12">
+        <div className="mx-auto grid w-[350px] gap-6">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
               <Card className="mx-auto max-w-md">
@@ -151,22 +170,6 @@ export default function Home() {
               </Card>
             </form>
           </Form>
-
-          <div>
-            {transcript && (
-              <Sheet>
-                <Button asChild variant="outline" className="mt-4">
-                  <SheetTrigger className="">Show Transcript</SheetTrigger>
-                </Button>
-                <SheetContent>
-                  <SheetHeader>
-                    <SheetTitle>Transcript</SheetTitle>
-                    <SheetDescription>{transcript.text}</SheetDescription>
-                  </SheetHeader>
-                </SheetContent>
-              </Sheet>
-            )}
-          </div>
           {messages.length > 0 && (
             <>
               {" "}
@@ -183,19 +186,16 @@ export default function Home() {
           )}
         </div>
       </div>
-
-      <Dialog open={isOpen} onOpenChange={onClose}>
-        <DialogContent
-          onPointerDownOutside={(event: any) => event.preventDefault()}
-          onEscapeKeyDown={(event: any) => event.preventDefault()}
-        >
-          <LoadingTransactionsEvent
-            eventId={eventId}
-            setEventId={setEventId}
-            onClose={onClose}
-          />
-        </DialogContent>
-      </Dialog>
+      <div className="bg-muted">
+        {transcript && (
+          <div>
+            <div>Show Transcript</div>
+            <ScrollArea className="h-full" ref={scrollRef2}>
+              <div className="">{transcript.text}</div>
+            </ScrollArea>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
